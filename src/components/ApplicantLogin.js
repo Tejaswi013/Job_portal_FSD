@@ -18,24 +18,35 @@ function ApplicantLogin({ setPage }) {
 
     const data = await res.json();
     if (res.ok) {
-      // Save user role to localStorage
       localStorage.setItem('userRole', 'applicant');
       setMessage('Login successful!');
       setPage('home');
-    }  else {
+    } else {
       setMessage(data.message || 'Login failed');
     }
   };
 
   return (
-    <div>
+    <div className="auth-form">
       <h2>Applicant Login</h2>
       <form onSubmit={handleSubmit}>
-        <input name="email" type="email" placeholder="Email" onChange={handleChange} required /><br />
-        <input name="password" type="password" placeholder="Password" onChange={handleChange} required /><br />
+        <input
+          name="email"
+          type="email"
+          placeholder="Email"
+          onChange={handleChange}
+          required
+        />
+        <input
+          name="password"
+          type="password"
+          placeholder="Password"
+          onChange={handleChange}
+          required
+        />
         <button type="submit">Login</button>
       </form>
-      <p>{message}</p>
+      <p className="message">{message}</p>
     </div>
   );
 }

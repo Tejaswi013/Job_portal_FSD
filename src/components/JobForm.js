@@ -21,10 +21,8 @@ function JobForm({ onJobAdded }) {
 
       if (!res.ok) throw new Error('Failed to add job');
 
-      const data = await res.json();
-      onJobAdded(); // Callback to refresh job list
-
-      // Clear form
+      await res.json();
+      onJobAdded();
       setTitle('');
       setCompany('');
       setDescription('');
@@ -36,49 +34,42 @@ function JobForm({ onJobAdded }) {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-  <h2>Add a New Job</h2>
+    <form onSubmit={handleSubmit} className="job-form">
+      <h2>Add a New Job</h2>
 
-  <div>
-    <label htmlFor="title">Title:</label>
-    <input
-      id="title"
-      value={title}
-      onChange={(e) => setTitle(e.target.value)}
-      required
-      placeholder="Job title, e.g. Full Stack Developer"
-    />
-  </div>
+      <label htmlFor="title">Title</label>
+      <input
+        id="title"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        required
+        placeholder="Job title, e.g. Full Stack Developer"
+      />
 
-  <div>
-    <label htmlFor="company">Company:</label>
-    <input
-      id="company"
-      value={company}
-      onChange={(e) => setCompany(e.target.value)}
-      required
-      placeholder="Company name, e.g. OpenAI"
-    />
-  </div>
+      <label htmlFor="company">Company</label>
+      <input
+        id="company"
+        value={company}
+        onChange={(e) => setCompany(e.target.value)}
+        required
+        placeholder="Company name, e.g. OpenAI"
+      />
 
-  <div>
-    <label htmlFor="description">Description:</label>
-    <textarea
-      id="description"
-      value={description}
-      onChange={(e) => setDescription(e.target.value)}
-      required
-      placeholder="Brief description of the role"
-    />
-  </div>
+      <label htmlFor="description">Description</label>
+      <textarea
+        id="description"
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+        required
+        placeholder="Brief description of the role"
+      />
 
-  <button type="submit" disabled={loading}>
-    {loading ? 'Adding...' : 'Add Job'}
-  </button>
+      <button type="submit" disabled={loading}>
+        {loading ? 'Adding...' : 'Add Job'}
+      </button>
 
-  {error && <p className="error">{error}</p>}
-</form>
-
+      {error && <p className="error">{error}</p>}
+    </form>
   );
 }
 

@@ -11,8 +11,6 @@ function JobList({ refresh }) {
     resume: null,
   });
 
-
-  
   useEffect(() => {
     setLoading(true);
     fetch('http://localhost:5000/api/jobs')
@@ -38,42 +36,41 @@ function JobList({ refresh }) {
     setApplicant((prev) => ({ ...prev, resume: e.target.files[0] }));
   };
 
- const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  if (!applicant.name || !applicant.email) {
-    alert('Name and email are required!');
-    return;
-  }
-
-  const formData = new FormData();
-  formData.append('name', applicant.name);
-  formData.append('email', applicant.email);
-  formData.append('phone', applicant.phone);
-  formData.append('jobId', applyingJobId);
-  if (applicant.resume) {
-    formData.append('resume', applicant.resume);
-  }
-
-  try {
-    const res = await fetch('http://localhost:5000/api/applications', {
-      method: 'POST',
-      body: formData,
-    });
-
-    if (res.ok) {
-      alert('Application submitted successfully!');
-      setApplyingJobId(null);
-    } else {
-      const errorData = await res.json();
-      alert('Failed to submit application: ' + errorData.message);
+    if (!applicant.name || !applicant.email) {
+      alert('Name and email are required!');
+      return;
     }
-  } catch (err) {
-    alert('Error submitting application');
-    console.error(err);
-  }
-};
 
+    const formData = new FormData();
+    formData.append('name', applicant.name);
+    formData.append('email', applicant.email);
+    formData.append('phone', applicant.phone);
+    formData.append('jobId', applyingJobId);
+    if (applicant.resume) {
+      formData.append('resume', applicant.resume);
+    }
+
+    try {
+      const res = await fetch('http://localhost:5000/api/applications', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (res.ok) {
+        alert('Application submitted successfully!');
+        setApplyingJobId(null);
+      } else {
+        const errorData = await res.json();
+        alert('Failed to submit application: ' + errorData.message);
+      }
+    } catch (err) {
+      alert('Error submitting application');
+      console.error(err);
+    }
+  };
 
   if (loading) return <p>Loading jobs...</p>;
 
@@ -85,15 +82,17 @@ function JobList({ refresh }) {
       ) : (
         <ul>
           {jobs.map((job) => (
-            <li key={job._id}>
-              <span className="job-title">{job.title}</span>
-              <span className="job-company"> — {job.company}</span>
+            <li key={job._id} className="job-item">
+              <div>
+                <span className="job-title">{job.title}</span>{' '}
+                <span className="job-company">— {job.company}</span>
+              </div>
               <p className="job-description">{job.description}</p>
 
               <button onClick={() => handleApplyClick(job._id)}>Apply</button>
 
               {applyingJobId === job._id && (
-                <form onSubmit={handleSubmit} style={{ marginTop: '10px' }}>
+                <form onSubmit={handleSubmit} className="application-form">
                   <input
                     type="text"
                     name="name"
@@ -140,3 +139,4 @@ function JobList({ refresh }) {
 }
 
 export default JobList;
+
